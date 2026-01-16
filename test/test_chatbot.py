@@ -1,27 +1,26 @@
 # test_chatbot.py
 import sys
-import asyncio
-import os
-from dotenv import load_dotenv
 sys.path.append(".")
-
+import asyncio
 from langchain_core.messages import HumanMessage
-from src.agents.chatbot import chatbot
-
-load_dotenv()
+from src.agents.agents import agents
 
 async def main():
-    result = await chatbot.ainvoke(
-        {
-            "messages": [HumanMessage(content="안녕")]
-        },
-        config={
-            "configurable": {
-                "model": "gpt-4o-mini"
-            }
-        }
-    )
 
-    print(result)
+    while True:
+        message = input("명령어를 입력하세요 (exit 입력 시 종료): ")
+        if message == "exit":
+            break
+
+        result = await agents["chatbot"].graph_like.ainvoke(
+            {
+                "messages": [HumanMessage(content=message)]
+            }
+        )
+
+    # LLM 응답 출력
+        ai_message = result["messages"][-1]
+        print(f"AI: {ai_message.content}")
+
 
 asyncio.run(main())
