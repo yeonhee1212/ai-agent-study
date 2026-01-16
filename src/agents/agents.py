@@ -8,6 +8,6 @@ class Agent:
     graph_like: Pregel
 
 agents : dict[str, Agent] = {
-    "chatbot" : Agent("this is simple chatbot" , chatbot)
+    "chatbot" : Agent("this is simple chatbot", chatbot)
 }
 
