@@ -5,8 +5,8 @@ from langgraph.checkpoint.memory import MemorySaver
 from .llm_model import get_model
 
 # 모델 인스턴스를 모듈 레벨에서 한 번만 생성
-model = get_model()
-print(f"[초기화] 연결된 llm model : {model.model}")
+model = get_model("GPT_4_MINI")
+print(f"[초기화] 연결된 llm model : {model.model_name}")
 
 # 체크포인터를 생성하여 상태 저장/복원
 checkpointer = MemorySaver()
