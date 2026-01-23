@@ -17,8 +17,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 # =========================
 # PPT
 #  ├─ extract_ppt_text()  → 노트/텍스트
-#  ├─ ppt_to_pdf()
-#  │   └─ PDF → 이미지
+#  ├─ pdf_to_images()
 #  │       └─ Vision 요약
 #  └─ slide 단위로 병합 → LangChain Document
 # =========================
@@ -197,4 +196,4 @@ retriever = vector_store.as_retriever(search_kwargs={'k': 3})
 
 # print(retriever.invoke("framework란 뭐야?"))
 
-print(retriever.invoke("ProObject21의 주요기능은 크게 뭘로 나눠져있어?"))
+# print(retriever.invoke("ProObject21의 주요기능은 크게 뭘로 나눠져있어?"))

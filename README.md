@@ -9,10 +9,20 @@
 5. 서버 실행
     python main_server.py
 6. 다른 터미널에서 화면 실행
-    python main_front.py
+    streamlit run main_front.py
 
-## ppt 임베딩
-1. pdf로 내보내기 해서 같은 경로에 생성
+## ppt파일 임베딩
+1. root디렉토리에 doc폴더 생성해서 doc폴더 안에 ppt복붙, ppt->pdf내보내기 한 파일 복붙
+    - doc/a.ppt
+    - doc/a.pdf
 2. sudo apt-get update
     sudo apt-get install -y poppler-utils 
     pdf2image는 poppler-utils가 필요함 
+3. 스크립트 실행
+    python src/scripts/create_po_vector_db.py 
+
+## Agent소개
+1. chatbot : 단순 llm에 질의
+2. probject_chatbot : proobject21 ppt파일 전처리 후 임베딩한 문서를 기반으로 한 챗봇
+
+
