@@ -15,13 +15,13 @@ async def main():
 
         result = await agents["chatbot"].graph_like.ainvoke(
             {
-                "messages": [HumanMessage(content=message)]
+                "query": [HumanMessage(content=message)]
             },
             config={"configurable": {"thread_id": thread_id}}
         )
 
         # LLM 응답 출력
-        ai_message = result["messages"][-1]
+        ai_message = result["query"][-1]
         print(f"AI: {ai_message.content}")
 
 

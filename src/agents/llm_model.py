@@ -19,12 +19,12 @@ def get_model(model_key_name=None) -> BaseChatModel:
         model_dict_str = os.getenv("OLLAMA_MODEL_DICT", "{}")
         try:
             model_dict = json.loads(model_dict_str)
-            model_name = model_dict.get(model_key_name, "gemma2:latest")
+            model_name = model_dict.get(model_key_name, "qwen3-vl")
         except json.JSONDecodeError:
             # JSON 파싱 실패 시 기본값 사용
-            model_name = "gemma2:latest"
+            model_name = "qwen3-vl"
         
-        return ChatOllama(model=model_name, temperature=0.5)
+        return ChatOllama(model=model_name, temperature=0.0)
 
     # OPENAI_API_KEY 확인
     openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -41,4 +41,4 @@ def get_model(model_key_name=None) -> BaseChatModel:
         return ChatOpenAI(model=model_name, temperature=0.5)
         
     # 둘 다 없으면 기본값으로 OpenAI 사용 (API 키는 환경변수에서 자동으로 읽음)
-    return ChatOllama(model="gemma2:latest", temperature=0.5)
+    return ChatOllama(model="qwen3-vl", temperature=0.0)

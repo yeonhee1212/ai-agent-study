@@ -6,6 +6,24 @@ import uuid
 st.set_page_config(page_title="AI Agent Chat", layout="centered", page_icon=":robot:")
 st.title("AI Agent Chat")
 
+# 에이전트 선택 드롭다운
+if "selected_agent" not in st.session_state:
+    st.session_state.selected_agent = "chatbot"
+
+selected_agent = st.selectbox(
+    "에이전트 선택",
+    options=["chatbot", "rag_agent"],
+    index=0 if st.session_state.selected_agent == "chatbot" else 1,
+    key="agent_selector"
+)
+
+# 에이전트가 변경되면 대화 히스토리 초기화
+if st.session_state.selected_agent != selected_agent:
+    st.session_state.selected_agent = selected_agent
+    st.session_state.messages = []
+    st.session_state.thread_id = str(uuid.uuid4())
+    st.rerun()
+
 if "thread_id" not in st.session_state:
     st.session_state.thread_id = str(uuid.uuid4())
 
@@ -33,7 +51,7 @@ if user_input:
         "messages": [
             {
                 "role": "user",
-                "content":user_input
+                "content": user_input
             }
         ],
         "thread_id": st.session_state.thread_id
@@ -41,15 +59,27 @@ if user_input:
 
     with st.chat_message("assistant"):
         with st.spinner("AI가 메시지를 생성중입니다..."):
+            # 선택한 에이전트에 따라 엔드포인트 결정
+            endpoint_map = {
+                "chatbot": "/chatbot",
+                "rag_agent": "/self_rag_agent"
+            }
+            endpoint = endpoint_map.get(selected_agent, "/chatbot")
+            
             ai_response = requests.post(
-                "http://localhost:8000/chatbot",
+                f"http://localhost:8000{endpoint}",
                 json=payload,
-                timeout=60
+                timeout=600
             )
-            ai_response.raise_for_status()
+            try:
+                ai_response.raise_for_status()
+                ai_response_text = ai_response.json()["message"]["content"]
+                st.markdown(ai_response_text)
+            except Exception as e:
+                st.error("AI 응답을 받는 중 오류가 발생했습니다.")
+                st.error(f"오류 메시지: {e}")
+                ai_response_text = "오류가 발생했습니다. 다시 시도해주세요."
 
-            ai_response_text = ai_response.json()["message"]["content"]
-            st.markdown(ai_response_text)
 
     st.session_state.messages.append({
         "role": "assistant",
