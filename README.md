@@ -28,13 +28,14 @@
 2. probject_chatbot
     - proobject21 ppt파일 RAG agent
 
-3. tmaxsoft_agent
+3. tmaxsoft_agent  
     - 멀티 에이전트 라우팅 구조
-        HumanMessage
-            ↓
-        LLM Router
-            ├─ web_search_graph : 웹 검색 agent
-            ├─ general_chat_graph : 대화 agent
-            ├─ ProObject Agent Graph : proobject rag agent
-            └─ JEUS Agent Graph : jeus rag agent
-
+    ```
+    HumanMessage
+        ↓
+    LLM Router
+        ├─ web_search_graph : 웹 검색 agent
+        ├─ general_chat_graph : 대화 agent
+        ├─ ProObject Agent Graph : proobject rag agent
+        └─ JEUS Agent Graph : jeus rag agent
+    ```
