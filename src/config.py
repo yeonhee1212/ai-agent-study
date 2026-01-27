@@ -22,3 +22,4 @@ DEFAULT_THREAD_ID = "default"
 # API 엔드포인트
 ENDPOINT_CHATBOT = "/chatbot"
 ENDPOINT_PROJECT_CHATBOT = "/probject_chatbot"
+ENDPOINT_TMAXSOFT_AGENT = "/tmaxsoft_agent"

@@ -1,5 +1,6 @@
-from .chatbot_agent import chatbot
-from .probject_chatbot import probject_chatbot
+from .chatbot_graph import chatbot
+from .probject_graph import probject_chatbot as proobject_agent
+from .tmaxsoft_agent import tmaxsoft_agent
 from dataclasses import dataclass
 from langgraph.pregel import Pregel
 
@@ -12,6 +13,7 @@ class Agent:
 
 agents: dict[str, Agent] = {
     "chatbot": Agent("this is simple chatbot", chatbot),
-    "probject_chatbot": Agent("this is RAG agent", probject_chatbot),
+    "probject_chatbot": Agent("this is RAG agent", proobject_agent),
+    "tmaxsoft_agent": Agent("this is tmaxsoft agent", tmaxsoft_agent),
 }
 

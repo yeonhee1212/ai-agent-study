@@ -90,3 +90,41 @@ async def probject_chatbot(request: ChatRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"에러 발생: {str(e)}")
+
+
+@app.post("/tmaxsoft_agent", response_model=ChatResponse)
+async def tmaxsoft_agent(request: ChatRequest):
+    """
+    Tmaxsoft agent 엔드포인트
+    tmaxsoft_agent은 AgentState (query: str) 형식을 기대
+    """
+    try:
+        agent = agents["tmaxsoft_agent"]
+        
+        # 마지막 사용자 메시지의 내용을 query로 사용
+        user_messages = get_user_messages(request)
+        if not user_messages:
+            raise HTTPException(status_code=400, detail="사용자 메시지가 없습니다.")
+        
+        query = user_messages[-1]
+
+        result = await agent.graph_like.ainvoke(
+            {
+                "query": query,
+                "context": [],
+                "answer": ""
+            },
+            config={"configurable": {"thread_id": get_thread_id(request)}},
+        )
+
+        ai_response_text = result["answer"]
+        return ChatResponse(
+            message=Message(role="assistant", content=ai_response_text)
+        )
+    except KeyError:
+        raise HTTPException(
+            status_code=500, detail="tmaxsoft_agent 에이전트를 찾을 수 없습니다."
+        )
+    except Exception as e:
+        print(f"에러 발생: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"에러 발생: {str(e)}")

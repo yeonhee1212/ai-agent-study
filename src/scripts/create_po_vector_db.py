@@ -12,7 +12,7 @@ from pdf2image import convert_from_path
 from src.agents.common import llm_model
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 # =========================
 # PPT

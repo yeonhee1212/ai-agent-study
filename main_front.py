@@ -6,6 +6,7 @@ from src.config import (
     FRONTEND_API_TIMEOUT,
     ENDPOINT_CHATBOT,
     ENDPOINT_PROJECT_CHATBOT,
+    ENDPOINT_TMAXSOFT_AGENT
 )
 
 # 페이지 설정
@@ -15,10 +16,11 @@ st.set_page_config(
 st.title("AI Agent Chat")
 
 # 에이전트 옵션
-AGENT_OPTIONS = ["chatbot", "probject_chatbot"]
+AGENT_OPTIONS = ["chatbot", "probject_chatbot", "tmaxsoft_agent"]
 ENDPOINT_MAP = {
     "chatbot": ENDPOINT_CHATBOT,
     "probject_chatbot": ENDPOINT_PROJECT_CHATBOT,
+    "tmaxsoft_agent": ENDPOINT_TMAXSOFT_AGENT
 }
 
 # 세션 상태 초기화

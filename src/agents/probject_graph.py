@@ -10,7 +10,7 @@ from langgraph.graph import StateGraph, START, END
 from typing import TypedDict, List
 from langchain_chroma import Chroma
 from .common import llm_model, checkpointer
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 
 class AgentState(TypedDict):
@@ -38,8 +38,10 @@ def retrieve(state: AgentState) -> AgentState:
     """
     벡터 스토어에서 관련 문서를 검색
     """
+    print(f"retrieve: {state['query']}")
     query = state["query"]
     docs = retriever.invoke(query)
+    print(f"docs: {docs}")
     return AgentState(query=query, context=docs, answer="")
 
 def generate_answer(state: AgentState) -> AgentState:

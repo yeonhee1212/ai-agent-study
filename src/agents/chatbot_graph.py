@@ -4,7 +4,6 @@ from langgraph.func import entrypoint
 from .common import llm_model, checkpointer
 from src.config import CHATBOT_MAX_HISTORY
 
-
 @entrypoint(checkpointer=checkpointer)
 async def chatbot(
     inputs: dict[str, list[BaseMessage]],

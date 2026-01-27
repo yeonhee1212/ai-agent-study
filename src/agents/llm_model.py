@@ -12,7 +12,7 @@ load_dotenv()
 DEFAULT_OLLAMA_MODEL = "qwen3-vl"
 DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
 DEFAULT_OLLAMA_TEMPERATURE = 0.0
-DEFAULT_OPENAI_TEMPERATURE = 0.5
+DEFAULT_OPENAI_TEMPERATURE = 0.0
 
 
 def _parse_model_dict(env_key: str, default_model: str) -> dict[str, str]:
