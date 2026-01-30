@@ -12,27 +12,40 @@ from langchain_chroma import Chroma
 from .common import llm_model, checkpointer
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
+from langchain_classic import hub
+from typing import Literal
 
 class AgentState(TypedDict):
     query: str
     context: List[Document]
     answer: str
 
+_embedding_model = None
+_vector_store = None
+_retriever = None
 
-# 임베딩 모델 및 벡터 스토어 초기화
-embedding_model = HuggingFaceEmbeddings(
-    model_name=EMBEDDING_MODEL_NAME,
-    model_kwargs={"device": EMBEDDING_DEVICE},
-    encode_kwargs={"normalize_embeddings": True},
-)
-
-vector_store = Chroma(
-    collection_name=RAG_COLLECTION_NAME,
-    persist_directory=RAG_PERSIST_DIRECTORY,
-    embedding_function=embedding_model,
-)
-
-retriever = vector_store.as_retriever(search_kwargs={"k": RAG_RETRIEVER_K})
+def _get_retriever():
+    """Retriever를 지연 로딩으로 초기화"""
+    global _embedding_model, _vector_store, _retriever
+    
+    if _retriever is None:
+        print("[ProObject Agent] 임베딩 모델 및 벡터 스토어 초기화 중...")
+        _embedding_model = HuggingFaceEmbeddings(
+            model_name=EMBEDDING_MODEL_NAME,
+            model_kwargs={"device": EMBEDDING_DEVICE},
+            encode_kwargs={"normalize_embeddings": True},
+        )
+        
+        _vector_store = Chroma(
+            collection_name=RAG_COLLECTION_NAME,
+            persist_directory=RAG_PERSIST_DIRECTORY,
+            embedding_function=_embedding_model,
+        )
+        
+        _retriever = _vector_store.as_retriever(search_kwargs={"k": RAG_RETRIEVER_K})
+        print("[ProObject Agent] 초기화 완료")
+    
+    return _retriever
 
 def retrieve(state: AgentState) -> AgentState:
     """
@@ -40,6 +53,7 @@ def retrieve(state: AgentState) -> AgentState:
     """
     print(f"retrieve: {state['query']}")
     query = state["query"]
+    retriever = _get_retriever()
     docs = retriever.invoke(query)
     print(f"docs: {docs}")
     return AgentState(query=query, context=docs, answer="")
@@ -74,7 +88,21 @@ def generate_answer(state: AgentState) -> AgentState:
 
     return AgentState(query=query, context=context, answer=response.content)
 
-# 그래프 정의 및 컴파일
+# doc_relevance_prompt = hub.pull("langchain-ai/rag-document-relevance")
+# def check_doc_relevance(state: AgentState) -> Literal['relevant', 'irrelevant']:
+#     query = state['query']
+#     context = state['context']
+#     doc_relevance_chain = doc_relevance_prompt | llm_model
+#     response = doc_relevance_chain.invoke({
+#         'question': query,
+#         'documents': context,
+#     })
+#     if response['Score'] == 1:
+#         return 'relevant'
+#     else:
+#         return 'irrelevant'
+
+# 그래프 정의 및 컴파일 
 def create_probject_chatbot():
     """ProObject 챗봇 그래프 생성"""
     graph_builder = StateGraph(AgentState)

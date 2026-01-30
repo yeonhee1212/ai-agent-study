@@ -5,8 +5,18 @@ from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 from langchain_ollama import ChatOllama
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
+
+# LangSmith 설정: API 키가 있고 명시적으로 활성화된 경우에만 사용
+langsmith_api_key = os.getenv("LANGSMITH_API_KEY")
+langsmith_tracing = os.getenv("LANGSMITH_TRACING", "").lower()
+
+if langsmith_api_key and langsmith_tracing in ("true", "1", "yes"):
+    if os.getenv("OPENAI_API_KEY"):
+        from langsmith.wrappers import wrap_openai
+        openai_langsmith_wrapper = wrap_openai(OpenAI())
 
 # 기본 모델 설정
 DEFAULT_OLLAMA_MODEL = "qwen3-vl"

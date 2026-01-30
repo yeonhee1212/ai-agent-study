@@ -26,6 +26,7 @@ dependencies = [
     "sentence-transformers>=5.2.0",
     "duckduckgo-search>=8.1.1",
     "ddgs>=9.10.0",
+    "langsmith>=0.6.4",
 ]
 
 [tool.basedpyright]

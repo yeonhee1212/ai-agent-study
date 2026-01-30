@@ -36,6 +36,5 @@
     LLM Router
         ├─ web_search_graph : 웹 검색 agent
         ├─ general_chat_graph : 대화 agent
-        ├─ ProObject Agent Graph : proobject rag agent
-        └─ JEUS Agent Graph : jeus rag agent
+        └─ ProObject Agent Graph : proobject rag agent
     ```
