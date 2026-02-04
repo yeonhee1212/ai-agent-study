@@ -3,10 +3,12 @@ import requests
 import uuid
 from src.config import (
     SERVER_URL,
+    SERVER_PORT,
     FRONTEND_API_TIMEOUT,
     ENDPOINT_CHATBOT,
     ENDPOINT_PROJECT_CHATBOT,
-    ENDPOINT_TMAXSOFT_AGENT
+    ENDPOINT_TMAXSOFT_AGENT,
+    ENDPOINT_MCP_CLIENT_AGENT
 )
 
 # 페이지 설정
@@ -16,11 +18,12 @@ st.set_page_config(
 st.title("AI Agent Chat")
 
 # 에이전트 옵션
-AGENT_OPTIONS = ["chatbot", "probject_chatbot", "tmaxsoft_agent"]
+AGENT_OPTIONS = ["chatbot", "probject_chatbot", "tmaxsoft_agent", "mcp_client_agent"]
 ENDPOINT_MAP = {
     "chatbot": ENDPOINT_CHATBOT,
     "probject_chatbot": ENDPOINT_PROJECT_CHATBOT,
-    "tmaxsoft_agent": ENDPOINT_TMAXSOFT_AGENT
+    "tmaxsoft_agent": ENDPOINT_TMAXSOFT_AGENT,
+    "mcp_client_agent": ENDPOINT_MCP_CLIENT_AGENT
 }
 
 # 세션 상태 초기화
@@ -68,7 +71,7 @@ if user_input:
         "thread_id": st.session_state.thread_id,
     }
     endpoint = ENDPOINT_MAP.get(selected_agent, ENDPOINT_CHATBOT)
-    url = f"{SERVER_URL}{endpoint}"
+    url = f"{SERVER_URL}:{SERVER_PORT}{endpoint}"
 
     # AI 응답 요청
     with st.chat_message("assistant"):

@@ -10,12 +10,7 @@ from typing import Literal
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
-
-
-class AgentState(TypedDict):
-    query: str
-    context: list[Document]
-    answer: str
+from .state import AgentState
 
 class Route(BaseModel):
     target: Literal["web_search", "proobject_agent", "chatbot"] = Field(

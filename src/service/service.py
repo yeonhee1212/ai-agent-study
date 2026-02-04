@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from langchain_core.messages import HumanMessage
-from src.agents.agents import agents
+from src.agents.agents import agents, get_lazy_agent
+from src.agents.lazy_loading_agent import LazyLoadingAgent
 from src.schema.schema import ChatRequest, ChatResponse, Message
 from src.config import DEFAULT_THREAD_ID
 
@@ -124,6 +125,43 @@ async def tmaxsoft_agent(request: ChatRequest):
     except KeyError:
         raise HTTPException(
             status_code=500, detail="tmaxsoft_agent 에이전트를 찾을 수 없습니다."
+        )
+    except Exception as e:
+        print(f"에러 발생: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"에러 발생: {str(e)}")
+
+
+@app.post("/mcp_client_agent", response_model=ChatResponse)
+async def mcp_client_agent_endpoint(request: ChatRequest):
+    """
+    MCP Client Agent 엔드포인트.
+    UI(main_front) → FastAPI(8000) → mcp_client_agent → MCP 서버(8001) 도구 호출.
+    """
+    try:
+        agent = await get_lazy_agent("mcp_client_agent")
+        user_messages = get_user_messages(request)
+        if not user_messages:
+            raise HTTPException(status_code=400, detail="사용자 메시지가 없습니다.")
+        query = user_messages[-1]
+        # LazyLoadingAgent면 get_graph(), 아니면 이미 그래프
+        graph = agent.get_graph() if isinstance(agent, LazyLoadingAgent) else agent
+        result = await graph.ainvoke(
+            {"messages": [HumanMessage(content=query)]},
+            config={"configurable": {"thread_id": get_thread_id(request)}},
+        )
+
+        messages = result.get("messages", [])
+        if not messages:
+            raise HTTPException(status_code=500, detail="응답 메시지가 없습니다.")
+
+        last_message = messages[-1]
+
+        return ChatResponse(
+            message=Message(role="assistant", content=last_message.content)
+        )
+    except KeyError:
+        raise HTTPException(
+            status_code=500, detail="mcp_client_agent 에이전트를 찾을 수 없습니다."
         )
     except Exception as e:
         print(f"에러 발생: {str(e)}")
