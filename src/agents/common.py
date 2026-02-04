@@ -1,6 +1,9 @@
 """
 공통 설정 및 유틸리티 모듈
 """
+from dotenv import load_dotenv
+load_dotenv()
+
 from langgraph.checkpoint.memory import MemorySaver
 from .llm_model import get_model
 

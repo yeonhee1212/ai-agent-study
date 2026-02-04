@@ -14,11 +14,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain_classic import hub
 from typing import Literal
-
-class AgentState(TypedDict):
-    query: str
-    context: List[Document]
-    answer: str
+from .state import AgentState
 
 _embedding_model = None
 _vector_store = None
