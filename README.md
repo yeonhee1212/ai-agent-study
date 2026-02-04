@@ -39,9 +39,10 @@
         └─ ProObject Agent Graph : proobject rag agent
     ```
 
-4. mcp_client_agent
-    MCP Client 요청에 따라 Mcp Server에 Streamble HTTP 요청
-    실행방법
+4. mcp_client_agent 
+
+    - MCP Client 요청에 따라 Mcp Server에 Streamble HTTP 요청
+    - 실행방법
         - main_server.py 실행
         - main_front.py 실행
         - mcp_server.py 실행
