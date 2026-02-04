@@ -38,3 +38,12 @@
         ├─ general_chat_graph : 대화 agent
         └─ ProObject Agent Graph : proobject rag agent
     ```
+
+4. mcp_client_agent
+    MCP Client 요청에 따라 Mcp Server에 Streamble HTTP 요청
+    실행방법
+        - main_server.py 실행
+        - main_front.py 실행
+        - mcp_server.py 실행
+        - streamlit화면에서 mcp_client_agent선택 후 질문 -> main_server(8000번 포트) -> mcp server에서 요청에 맞는 tool 선택 (8001번 포트)
+
